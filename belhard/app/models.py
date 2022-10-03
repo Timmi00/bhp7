@@ -85,16 +85,16 @@ class Product(models.Model):
         ordering = ('price', 'title', 'article')
 
 
-class TableOrder(models.Model):
+class Order(models.Model):
     user = models.ForeignKey(
         User,
-        on_delete=models.PROTECT,
+        on_delete=models.DO_NOTHING,
         verbose_name='пользователь'
     )
-    category = models.ForeignKey(
+    product = models.ForeignKey(
         'Product',
-        on_delete=models.PROTECT,
-        verbose_name='продукт'
+        on_delete=models.DO_NOTHING,
+        verbose_name='товар'
     )
     date_created = models.DateTimeField(
         auto_now=True,
@@ -105,11 +105,11 @@ class TableOrder(models.Model):
         verbose_name='оплата'
     )
 
-    def __str__(self):
-        return self.date_created
+    def __bool__(self):
+        return self.is_paid
 
     class Meta:
-        db_table = 'app_tableOrders'
-        verbose_name = 'корзина'
-        verbose_name_plural = 'корзины'
-        ordering = ('date_created', 'is_paid')
+        db_table = 'app_orders'
+        verbose_name = 'заказ'
+        verbose_name_plural = 'заказы'
+        ordering = ('date_created',)
